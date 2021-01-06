@@ -30,7 +30,7 @@ public class RouteParser {
 		return actionList;
 	}
 	
-	public static GameActionPerformable parseLine(String line) {
+	private static GameActionPerformable parseLine(String line) throws Exception {
 		// Getting rid of comments, either full line or at the end of the line
 		String[] splits = line.split(COMMENT_SEPARATOR);
 		String commandStr = splits[0];
@@ -38,23 +38,27 @@ public class RouteParser {
 			return null;
 		}
 		
-		// splitting command and args/options
-		splits = commandStr.split(SPLIT_SEPARATOR);
-		commandStr = splits[0];
+		ParsableList<String> parsableLine = new ParsableList<>(commandStr.split(SPLIT_SEPARATOR));
 		
-		// Checking for a simple action
 		GameActionPerformable performable = null;
-		performable = SimpleGameAction.getGameActionByString(commandStr);
+
+		// Checking for a simple action
+		performable = SimpleGameAction.getGameActionFromLine(parsableLine);
+		
+		if(performable != null)
+			return performable;
+
+		// Checking for a utility action
+		performable = UtilityGameAction.getGameActionFromLine(parsableLine);
 		
 		if(performable != null)
 			return performable;
 		
-		// Checking for a utility action
-		performable = UtilityGameAction.getGameActionByString(commandStr);
-		
-		
+		/*
 		// Finally, we have a battle action
-		// idk
+		performable = BattleGameAction.getGameActionFromLine(parsableLine);
+		*/
 		
+		return performable;
 	}
 }

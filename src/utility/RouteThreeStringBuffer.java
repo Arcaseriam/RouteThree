@@ -13,6 +13,17 @@ public class RouteThreeStringBuffer {
 	
 	public void appendln(String str) {
 		append(str);
+		appendln();
+	}
+
+	/*
+	public void appendln(Object obj) {
+		if(obj != null)
+			appendln(obj.toString());
+	}
+	*/
+	
+	public void appendln() {
 		append(Constants.ENDL);
 	}
 	

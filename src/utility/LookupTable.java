@@ -2,8 +2,6 @@ package utility;
 
 import java.util.HashMap;
 
-import route_file.Alias;
-
 public class LookupTable<T extends Enum<T>> {	
 	private HashMap<Alias, T> map;
 

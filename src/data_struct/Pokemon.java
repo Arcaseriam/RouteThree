@@ -25,7 +25,7 @@ public class Pokemon implements Battleable {
 
 	private Species species;
     private Nature nature;
-    private Ability ability;
+    private int abilitySlot; //private Ability ability;
     private int level;
     private Stats stats;
     private IVs ivs;
@@ -33,33 +33,30 @@ public class Pokemon implements Battleable {
     private Boolean isWild;
     private Item item;
     
-    public Pokemon(Game game, Species species, Nature nature, Ability ability, int level, IVs ivs, 
-    		Moveset moves, Boolean isWild, Item item, boolean isDelayStatCalculation) {
+    public Pokemon(Game game, Species species, Nature nature, int abilitySlot, int level, IVs ivs, 
+    		Moveset moves, Boolean isWild, Item item) {
     	// all setters handle default cases, if objects are null or out of ranges
     	// stats shouldn't be set, but calculated
     	this.setSpecies(species);
     	this.setNature(nature);
-    	this.setAbility(ability);
+    	this.setAbilitySlot(abilitySlot);
     	this.setLevel(level);
     	this.setIvs(ivs);
     	this.setMoves(moves, game);
     	this.setWild(isWild);
     	this.setItem(item);
-    	
-    	if(!isDelayStatCalculation)
-    		this.calculateStats();
     }
     
-    public Pokemon(Game game, Species species, Nature nature, Ability ability, int level, IVs ivs) {
-    	this(game, species, nature, ability, level, ivs, 
-    			null, null, null, true);
+    public Pokemon(Game game, Species species, Nature nature, int abilitySlot, int level, IVs ivs) {
+    	this(game, species, nature, abilitySlot, level, ivs, 
+    			null, null, null);
     }
-    
+   
     ///TODO : not a copy constructor, used as a wrapper for subclasses
     // This doesn't calculate stats, as it's called by subclasses which implement EVs.
     public Pokemon(Game game, Pokemon pokemon) {
-    	this(game, pokemon.species, pokemon.nature, pokemon.ability, pokemon.level, pokemon.ivs, 
-    			pokemon.moves, pokemon.isWild, pokemon.item, true);
+    	this(game, pokemon.species, pokemon.nature, pokemon.abilitySlot, pokemon.level, pokemon.ivs, 
+    			pokemon.moves, pokemon.isWild, pokemon.item);
     }
     
 
@@ -97,6 +94,7 @@ public class Pokemon implements Battleable {
     	return exp / participants;
     }
     
+    /*
 	protected void calculateStats() {
 		try {
 			Stats stats = Stats.calculateStats(getLevel(), new Stats(getSpecies().getBaseStats()), getIvs(), getNature());
@@ -106,6 +104,7 @@ public class Pokemon implements Battleable {
 			e.printStackTrace();
 		}
 	}
+     */
 
 	public Species getSpecies() {
 		return species;
@@ -188,36 +187,29 @@ public class Pokemon implements Battleable {
 	}
 
 	public Ability getAbility() {
-		return ability;
+		return this.species.getAbilityFromSlot(this.abilitySlot);
+	}
+	
+	public int getAbilitySlot() {
+		return this.abilitySlot;
 	}
 
-	public void setAbility(Ability ability) {
-		if(ability == null)
-			ability = getSpecies().getAbility1();
-		this.ability = ability;
+	public void setAbilitySlot(int abilitySlot) {
+		if(abilitySlot < 0 || abilitySlot > 1)
+			abilitySlot = 0;
+		this.abilitySlot = abilitySlot;
 	}
 	
 	// Utility
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
-		/*
-		private Species species;
-	    private Nature nature;
-	    private Ability ability;
-	    private int level;
-	    private Stats stats;
-	    private IVs ivs;
-	    private Moveset moves;
-	    private Boolean isWild;
-	    private Item item;
-		*/
 		
 		sb.append(this.species.getName());
 		sb.append(" ");
 		sb.append(this.nature.name());
 		sb.append(" ");
-		sb.append(this.ability.name());
+		sb.append(this.getAbility());
 		sb.append(" L");
 		sb.append(this.level);
 		sb.append(" Stats:");

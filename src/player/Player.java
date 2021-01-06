@@ -27,9 +27,7 @@ public class Player {
 	
 	// Use when the party is being built
 	public Player(Game game) {
-		this.game = game;
-		this.badgeBoosts = new BadgeBoosts();
-		this.inventory = new Inventory();
+		this(game, new Party());
 	}
 	
 	public void setParty(Party party) {
@@ -38,6 +36,20 @@ public class Player {
 	
 	public PlayerPokemon getFrontPokemon() {
 		return party.get(0);
+	}
+	
+	/**
+	 * Retrieves the Pokemon in desired party slot.
+	 * @param slot The slot from 1 to 6.
+	 * @return the Pokemon in desired party slot.
+	 */
+	public PlayerPokemon getPokemon(int slot) {
+		if(slot < 0 || slot >= party.size()) 
+			slot = 0; //TODO : warning instead of default value ?
+		else
+			slot--;
+		
+		return party.get(slot);
 	}
 	
 	// Badge boosts
@@ -66,6 +78,7 @@ public class Player {
 		inventory.useItem(item, quantity);
 	}
 	
+		// alias for useItem
 	public void tossItem(Item item, int quantity) {
 		this.useItem(item, quantity);
 	}
@@ -73,13 +86,21 @@ public class Player {
 	public void getItem(Item item, int quantity) {
 		inventory.addItem(item, quantity);
 	}
+	
+	public void addMoney(int money) {
+		inventory.addMoney(money);
+	}
+	
+	public void spendMoney(int money) {
+		inventory.subtractMoney(money);
+	}
 
 	// Getters
 	public Game getGame() {
 		return game;
 	}
 
-	public List<PlayerPokemon> getParty() {
+	public Party getParty() {
 		return party;
 	}
 

@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import player.Player;
+import utility.Alias;
 import utility.LookupTable;
+import utility.RouteThreeStringBuffer;
 
 // These are commands that don't accept any options
 public enum SimpleGameAction implements GameActionPerformable {
@@ -27,11 +29,14 @@ public enum SimpleGameAction implements GameActionPerformable {
 	THUNDERBADGE(GameAction.getThunderBadge, "thunderbadge"),
 	
 	BATTLE_FRONTIER_FLAG(GameAction.setBattleFrontierFlag, "battlefrontierflag"),
-	
-	UNEQUIP(GameAction.unequip, "unequip"), 
 
 	SET_AMULET_COIN(GameAction.setAmuletCoin, "setamuletcoin"),
-	UNSET_AMULET_COIN(GameAction.unsetAmuletCoin, "unsetamuletcoin");
+	UNSET_AMULET_COIN(GameAction.unsetAmuletCoin, "unsetamuletcoin"),
+	
+	MONEY(GameAction.money, "money"),
+	INVENTORY(GameAction.inventory, "inventory", "bag"),
+	
+	PARTY(GameAction.party, "party", "displayparty");
 
 //	STATS(GameAction.stats, "stats"),
 //	RANGES(GameAction.ranges, "ranges");
@@ -44,9 +49,12 @@ public enum SimpleGameAction implements GameActionPerformable {
 			}
 		}
 	}
-	
-	public static SimpleGameAction getGameActionByString(String str) {
+	private static SimpleGameAction getGameActionByString(String str) {
 		return aliasTable.get(str); 
+	}
+	
+	public static SimpleGameAction getGameActionFromLine(ParsableList<String> line) {
+		return getGameActionByString(line.peek());
 	}
 	
 	
@@ -78,7 +86,7 @@ public enum SimpleGameAction implements GameActionPerformable {
 	}
 
 	@Override
-	public void performAction(Player p) {
-		performMethod.performAction(p);
+	public void performAction(Player p, RouteThreeStringBuffer out) {
+		performMethod.performAction(p, out);
 	}
 }

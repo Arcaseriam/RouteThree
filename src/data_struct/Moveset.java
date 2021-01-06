@@ -33,7 +33,10 @@ public class Moveset implements Iterable<Move>{
         	int moveLevel = levelMove.getLevel();
         	Move move = levelMove.getMove();
         	
-            if (!movesSet.contains(move) && moveLevel <= level) {
+        	if (moveLevel > level)
+        		break;
+        	
+            if (!movesSet.contains(move)) {
                 movesSet.add(move);
                 distinctMoves.add(move);
             }

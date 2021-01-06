@@ -1,9 +1,13 @@
 package player;
 
+import java.text.NumberFormat;
 import java.util.EnumMap;
+import java.util.Locale;
+import java.util.Map;
 
 import data.Item;
 import data.PocketType;
+import utility.RouteThreeStringBuffer;
 
 public class Inventory {
 	private int money;
@@ -63,5 +67,25 @@ public class Inventory {
 	public void sellItem(Item item, int quantity) {
 		this.useItem(item, quantity);
 		this.addMoney(quantity * (item.getCost() / 2));
+	}
+	
+	public String getMoneyString() {
+		return String.format("Money : %s", NumberFormat.getInstance(new Locale("en", "US")).format(money));
+	}
+	
+	@Override
+	public String toString() {
+		RouteThreeStringBuffer sb = new RouteThreeStringBuffer();
+		sb.appendln("INVENTORY:");
+		sb.appendln(getMoneyString());
+		sb.appendln("----------");
+		for(Map.Entry<PocketType, Pocket> entry : this.pockets.entrySet()) {
+			sb.appendln(entry.getKey().toString());
+			sb.appendln(entry.getValue().toString());
+			sb.appendln("----------");
+		}
+		sb.appendln();
+		
+		return sb.toString();
 	}
 }

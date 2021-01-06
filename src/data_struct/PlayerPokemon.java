@@ -1,8 +1,5 @@
 package data_struct;
 
-import java.util.Map.Entry;
-
-import data.Item;
 import data.Stat;
 import data_struct.EVs.EVsException;
 import player.Player;
@@ -22,7 +19,7 @@ public class PlayerPokemon extends BattlePokemon {
 	}
     
     public PlayerPokemon(Player master, Pokemon pokemon) {
-    	this(master, pokemon, null);
+    	this(master, pokemon, new EVs());
     }
     
     public boolean hasBadgeBoost(Stat stat) {
@@ -63,17 +60,16 @@ public class PlayerPokemon extends BattlePokemon {
 		
 		return sb.toString();
 	}
-	
-	@Override
-	public void calculateStats() {
-		this.updateEVs();
-		super.calculateStats();
-	}
-	
-	public void updateEVs() {
+
+	public void updateEVs() {		
 		for(Stat stat : this.evs.getStatMode()) {
 			this.getEvsUsed().put(stat, this.evs.get(stat));
 		}
+	}
+	
+	public void update() {
+		this.updateEVs();
+		super.calculateStats();
 	}
 	
 	public void setExperienceFromLevel(int level) {
@@ -89,10 +85,10 @@ public class PlayerPokemon extends BattlePokemon {
 		level++;
 		this.setLevel(level);
 		this.setExperienceFromLevel(level);
-		this.calculateStats();
+		this.update();
 	}
 
-	public void eatStatVitamin(Stat stat) {
+	private void eatStatVitamin(Stat stat) {
 		final int EVS_PER_VITAMIN = 10; //TODO : find better place for these
 		final int MAX_EVS_IN_STAT = 100;
 		

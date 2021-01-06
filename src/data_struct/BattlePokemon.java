@@ -21,7 +21,7 @@ public class BattlePokemon extends Pokemon implements Battleable {
 	}
     
     public BattlePokemon(Game game, Pokemon pokemon) {
-    	this(game, pokemon, null);
+    	this(game, pokemon, new EVs());
     }
     
     
@@ -35,7 +35,7 @@ public class BattlePokemon extends Pokemon implements Battleable {
 		this.evs_used = evsUsed;
 	}
 	
-	@Override
+
 	protected void calculateStats() {
 		try {
 			Stats stats = Stats.calculateStats(getLevel(), new Stats(getSpecies().getBaseStats()), getIvs(), getNature());

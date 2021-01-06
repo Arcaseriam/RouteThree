@@ -18,11 +18,14 @@ import data_struct.Pokemon;
 import player.Constants;
 import player.Party;
 import player.Player;
+import route_file.GameActionPerformable;
+import route_file.RouteParser;
+import utility.RouteThreeStringBuffer;
 
 public class Main {
 	public static Config config;
 	
-	// Initialize player from config
+	// Initialise player from config
 	public static Player generatePlayerFromConfig(Config config) {
 		Player player;
 		
@@ -33,7 +36,7 @@ public class Main {
 		player = new Player(game);
 		
 		// Init party
-		Party party = new Party();
+		Party party = player.getParty();
 		
 		String[] speciesArr = config.getSpeciesArr();
 		String[] natures = config.getNatures();
@@ -51,6 +54,7 @@ public class Main {
 				Species species = Species.getSpeciesFromString(speciesArr[i]);
 				Nature nature = Nature.getNatureFromString(natures[i]);
 				Ability ability = Ability.getAbilityFromString(abilities[i]);
+				int abilitySlot = species.getSlotFromAbility(ability);
 				int level = levels[i];
 				int hpIV = hpIVs[i];
 				int atkIV = atkIVs[i];
@@ -60,7 +64,7 @@ public class Main {
 				int spdIV = spdIVs[i];
 				IVs ivs = new IVs(hpIV, atkIV, defIV, speIV, spaIV, spdIV);
 
-				Pokemon pokemon = new Pokemon(game, species, nature, ability, level, ivs);
+				Pokemon pokemon = new Pokemon(game, species, nature, abilitySlot, level, ivs);
 				PlayerPokemon playerPokemon = new PlayerPokemon(player, pokemon);
 				
 				party.add(playerPokemon);
@@ -80,7 +84,16 @@ public class Main {
 			Config config = ConfigReader.readConfigFile();
 			Player player = generatePlayerFromConfig(config);
 			
-			System.out.println(player);
+			List<GameActionPerformable> actionList = RouteParser.parseRouteFile(config.getRouteFilename());
+			System.out.println(actionList); //TODO remove
+
+			RouteThreeStringBuffer outputBuffer = new RouteThreeStringBuffer();
+			for(GameActionPerformable action : actionList) {
+				action.performAction(player, outputBuffer);
+			}
+			
+			System.out.println(outputBuffer);
+			
 		} catch (InvalidFileFormatException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

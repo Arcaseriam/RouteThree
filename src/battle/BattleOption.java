@@ -6,7 +6,7 @@ import java.util.List;
 import utility.LookupTable;
 
 public enum BattleOption {
-	ALL_ITEMS(OptionType.PLAYER_OPPONENT, "items"), // 1, 1, 
+	ALL_ITEMS(OptionType.PLAYER_OPPONENT, "items"), // 
 		
     ATTACK         (OptionType.PLAYER_OPPONENT, "attack"        , "atk"),
     DEFENSE        (OptionType.PLAYER_OPPONENT, "defense"       , "def"),

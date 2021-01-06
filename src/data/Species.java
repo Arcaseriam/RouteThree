@@ -8,7 +8,7 @@ import utility.LookupTable;
 public enum Species {
 	// see : https://github.com/pret/pokeruby/blob/04f0a11a1525a7be98e9568e8fed00590994fe60/src/data/pokemon/base_stats.h
 	// order changed to match Dex
-	//          name        , HP , Atk, Def, Spe, SpA, SpD, type1        , type2  , catchRate, exp,HP,At,De,Sp,SA,SD, item1             , item2             , genderRatio, eggCycles, friendship, growthRate           , eggGroup1            , eggGroup2            , ability1             , ability2, safariZoneFleeRate, bodyColor, noFlip
+	//          name        , HP , Atk, Def, Spe, SpA, SpD, type1        , type2  , catchRate, exp,HP,At,De,Sp,SA,SD, item1             , item2             , genderRatio, eggCycles, friendship, growthRate           , eggGroup1            , eggGroup2            , ability0             , ability1, safariZoneFleeRate, bodyColor, noFlip
 	BULBASAUR  ("BULBASAUR" ,  45,  49,  49,  45,  65,  65, Type.GRASS   , Type.POISON  ,  45,  64, 0, 0, 0, 0, 1, 0, Item.NONE         , Item.NONE         , GenderRatio.FEMALE_12_5,  20,  70, GrowthRate.MEDIUM_SLOW, EggGroup.MONSTER     , EggGroup.GRASS       , Ability.OVERGROW     , Ability.NONE         , 0, BodyColor.GREEN , false),
 	IVYSAUR    ("IVYSAUR"   ,  60,  62,  63,  60,  80,  80, Type.GRASS   , Type.POISON  ,  45, 141, 0, 0, 0, 0, 1, 1, Item.NONE         , Item.NONE         , GenderRatio.FEMALE_12_5,  20,  70, GrowthRate.MEDIUM_SLOW, EggGroup.MONSTER     , EggGroup.GRASS       , Ability.OVERGROW     , Ability.NONE         , 0, BodyColor.GREEN , false),
 	VENUSAUR   ("VENUSAUR"  ,  80,  82,  83,  80, 100, 100, Type.GRASS   , Type.POISON  ,  45, 208, 0, 0, 0, 0, 2, 1, Item.NONE         , Item.NONE         , GenderRatio.FEMALE_12_5,  20,  70, GrowthRate.MEDIUM_SLOW, EggGroup.MONSTER     , EggGroup.GRASS       , Ability.OVERGROW     , Ability.NONE         , 0, BodyColor.GREEN , false),
@@ -420,7 +420,7 @@ public enum Species {
 	private int friendship;
 	private GrowthRate growthRate;
 	private EggGroup eggGroup1, eggGroup2;
-	private Ability ability1, ability2;
+	private Ability ability0, ability1;
 	private int safariZoneFleeRate;
 	private BodyColor color;
 	private boolean isNoFlip;
@@ -429,7 +429,7 @@ public enum Species {
 			Type type1, Type type2, int catchRate, int expYield, 
 			int evHP, int evAtk, int evDef, int evSpe, int evSpA, int evSpD,
 			Item item1, Item item2, GenderRatio genderRatio, int eggCycles, int friendship, GrowthRate growthRate,
-			EggGroup eggGroup1, EggGroup eggGroup2, Ability ability1, Ability ability2, int safariZoneFleeRate,
+			EggGroup eggGroup1, EggGroup eggGroup2, Ability ability0, Ability ability1, int safariZoneFleeRate,
 			BodyColor color, boolean noFlip) {
 		this.setIndex();
 		this.setName(name);
@@ -447,8 +447,8 @@ public enum Species {
 		this.setGrowthRate(growthRate);
 		this.setEggGroup1(eggGroup1);
 		this.setEggGroup2(eggGroup2);
+		this.setAbility0(ability0);
 		this.setAbility1(ability1);
-		this.setAbility2(ability2);
 		this.setSafariZoneFleeRate(safariZoneFleeRate);
 		this.setColor(color);
 		this.setNoFlip(noFlip);
@@ -514,12 +514,12 @@ public enum Species {
 		return eggGroup2;
 	}
 
-	public Ability getAbility1() {
-		return ability1;
+	public Ability getAbility0() {
+		return ability0;
 	}
 
-	public Ability getAbility2() {
-		return ability2;
+	public Ability getAbility1() {
+		return ability1;
 	}
 
 	public int getSafariZoneFleeRate() {
@@ -532,6 +532,17 @@ public enum Species {
 
 	public boolean isNoFlip() {
 		return isNoFlip;
+	}
+	
+	public Ability getAbilityFromSlot(int ability) {
+		if (ability == 1) return this.getAbility1();
+		return this.getAbility0();
+	}
+	
+	public int getSlotFromAbility(Ability ability) {
+		if(this.getAbility1() == ability)
+			return 1;
+		return 0;		
 	}
 
 	private void setName(String name) {
@@ -594,12 +605,12 @@ public enum Species {
 		this.eggGroup2 = eggGroup2;
 	}
 
-	private void setAbility1(Ability ability1) {
-		this.ability1 = ability1;
+	private void setAbility0(Ability ability1) {
+		this.ability0 = ability1;
 	}
 
-	private void setAbility2(Ability ability2) {
-		this.ability2 = ability2;
+	private void setAbility1(Ability ability2) {
+		this.ability1 = ability2;
 	}
 
 	private void setSafariZoneFleeRate(int safariZoneFleeRate) {
@@ -621,5 +632,4 @@ public enum Species {
 	private void setIndex() {
 		this.index = this.ordinal()+1;
 	}
-
 }

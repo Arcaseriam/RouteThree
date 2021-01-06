@@ -1,0 +1,10 @@
+rarecandy
+buy 9 POTION
+sell 4 POTION
+equip SOFTSAND
+party
+addmoney 1000
+spendmoney 500
+inventory
+unequip
+party
